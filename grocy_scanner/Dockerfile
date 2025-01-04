@@ -20,7 +20,7 @@ WORKDIR /app
 COPY --from=build /app/publish .
 
 # Copy the run.sh script for Home Assistant S6 overlay compatibility
-COPY /run.sh /run.sh
+COPY run.sh /run.sh
 RUN chmod +x /run.sh
 
 # Expose necessary ports
