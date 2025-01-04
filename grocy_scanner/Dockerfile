@@ -19,7 +19,8 @@ WORKDIR /app
 # Copy the published files from the build stage
 COPY --from=build /app/publish .
 
-# Copy the run.sh script for Home Assistant S6 overlay compatibility
+# Copy the run.sh script to /etc/services.d
+RUN mkdir -p /etc/services.d/grocy-scanner
 COPY run.sh /etc/services.d/grocy-scanner/run
 RUN chmod +x /etc/services.d/grocy-scanner/run
 
