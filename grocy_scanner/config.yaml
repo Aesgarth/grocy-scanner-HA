@@ -3,9 +3,11 @@ version: 1.0.0
 slug: grocy_scanner
 description: A barcode scanner for Grocy, integrated with Home Assistant.
 arch:
+  - aarch64
   - amd64
   - armv7
-  - arm64
+  - armhf
+  - i386
 startup: services
 boot: auto
 options:
