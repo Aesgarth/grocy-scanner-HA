@@ -3,11 +3,11 @@
 # Log add-on startup
 bashio::log.info "Starting Grocy Scanner Add-on"
 
-# Retrieve options from the configuration
+# Retrieve options from the add-on configuration
 API_KEY=$(bashio::config 'api_key')
 GROCY_URL=$(bashio::config 'grocy_url')
 
-# Log configuration
+# Log retrieved configuration
 bashio::log.info "API Key: ${API_KEY}"
 bashio::log.info "Grocy URL: ${GROCY_URL}"
 
