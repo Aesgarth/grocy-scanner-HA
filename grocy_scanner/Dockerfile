@@ -1,24 +1,30 @@
-# Use the Home Assistant base image
-FROM homeassistant/amd64-base:3.18
+# Stage 1: Build the .NET application using Microsoft's SDK image
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+WORKDIR /src
 
 # Copy application files
+COPY ["GrocyScanner.Service/GrocyScanner.Service.csproj", "GrocyScanner.Service/"]
+COPY ["GrocyScanner.Core/GrocyScanner.Core.csproj", "GrocyScanner.Core/"]
+RUN dotnet restore "./GrocyScanner.Service/GrocyScanner.Service.csproj"
+
+# Copy the rest of the source files and build the application
+COPY . .
+WORKDIR "/src/GrocyScanner.Service"
+RUN dotnet publish "GrocyScanner.Service.csproj" -c Release -o /app/publish
+
+# Stage 2: Use the Home Assistant base image to run the application
+FROM homeassistant/amd64-base:3.18
 WORKDIR /app
-COPY GrocyScanner.Service/ ./GrocyScanner.Service/
-COPY GrocyScanner.Core/ ./GrocyScanner.Core/
-COPY GrocyScanner.sln ./
 
-# Install .NET dependencies and build the application
-RUN apk add --no-cache dotnet-sdk \
- && dotnet restore ./GrocyScanner.Service/GrocyScanner.Service.csproj \
- && dotnet build ./GrocyScanner.Service/GrocyScanner.Service.csproj -c Release -o /app/build \
- && dotnet publish ./GrocyScanner.Service/GrocyScanner.Service.csproj -c Release -o /app/publish
+# Copy the published files from the build stage
+COPY --from=build /app/publish .
 
-# Copy add-on configuration files
+# Copy the run.sh script
 COPY grocy_scanner/run.sh /
 RUN chmod a+x /run.sh
 
 # Expose necessary ports
 EXPOSE 9080 9443
 
-# Set entry point
+# Set the entry point
 ENTRYPOINT [ "/run.sh" ]
