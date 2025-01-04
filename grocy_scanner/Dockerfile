@@ -1,5 +1,7 @@
 # Stage 1: Build the .NET application
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+#FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+FROM homeassistant/amd64-base:3.18
+
 WORKDIR /src
 COPY ["GrocyScanner.Service/GrocyScanner.Service.csproj", "GrocyScanner.Service/"]
 COPY ["GrocyScanner.Core/GrocyScanner.Core.csproj", "GrocyScanner.Core/"]
