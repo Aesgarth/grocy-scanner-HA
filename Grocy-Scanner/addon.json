@@ -10,7 +10,7 @@
     "5000/tcp": 5000,
     "80/tcp": 9080,
     "443/tcp": 9443
-  },
+  }
   "options": {
     "api_key": "YOUR_API_KEY",
     "grocy_url": "http://your-grocy-instance"
