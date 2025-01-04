@@ -1,31 +1,24 @@
-# Base image for running the .NET app
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
+# Use the Home Assistant base image
+FROM homeassistant/amd64-base:3.18
+
+# Copy application files
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
+COPY GrocyScanner.Service/ ./GrocyScanner.Service/
+COPY GrocyScanner.Core/ ./GrocyScanner.Core/
+COPY GrocyScanner.sln ./
 
-# Base image for building the .NET app
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
-WORKDIR /src
-COPY ["GrocyScanner.Service/GrocyScanner.Service.csproj", "GrocyScanner.Service/"]
-COPY ["GrocyScanner.Core/GrocyScanner.Core.csproj", "GrocyScanner.Core/"]
-RUN dotnet restore "GrocyScanner.Service/GrocyScanner.Service.csproj"
-COPY . .
-WORKDIR "/src/GrocyScanner.Service"
-RUN dotnet build "GrocyScanner.Service.csproj" -c Release -o /app/build
+# Install .NET dependencies and build the application
+RUN apk add --no-cache dotnet-sdk \
+ && dotnet restore ./GrocyScanner.Service/GrocyScanner.Service.csproj \
+ && dotnet build ./GrocyScanner.Service/GrocyScanner.Service.csproj -c Release -o /app/build \
+ && dotnet publish ./GrocyScanner.Service/GrocyScanner.Service.csproj -c Release -o /app/publish
 
-# Publish the .NET app
-FROM build AS publish
-RUN dotnet publish "GrocyScanner.Service.csproj" -c Release -o /app/publish
+# Copy add-on configuration files
+COPY grocy_scanner/run.sh /
+RUN chmod a+x /run.sh
 
-# Final runtime image
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
+# Expose necessary ports
+EXPOSE 9080 9443
 
-# Add environment variables for configuration
-ENV GROCY_API_KEY=default_api_key
-ENV GROCY_URL=http://localhost
-
-# Entry point for the application
-ENTRYPOINT ["dotnet", "GrocyScanner.Service.dll"]
+# Set entry point
+ENTRYPOINT [ "/run.sh" ]
