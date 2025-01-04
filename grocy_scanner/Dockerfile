@@ -19,8 +19,6 @@ WORKDIR /app
 # Copy the published files from the build stage
 COPY --from=build /app/publish .
 
-RUN apk add --no-cache bashio
-
 # Copy the run.sh script for Home Assistant S6 overlay compatibility
 COPY /run.sh /run.sh
 RUN chmod +x /run.sh
