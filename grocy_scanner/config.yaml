@@ -1,0 +1,19 @@
+name: Grocy Scanner
+version: 1.0.0
+slug: grocy_scanner
+description: A barcode scanner for Grocy, integrated with Home Assistant.
+arch:
+  - amd64
+  - armv7
+  - arm64
+startup: services
+boot: auto
+options:
+  api_key: YOUR_API_KEY
+  grocy_url: http://your-grocy-instance
+schema:
+  api_key: str
+  grocy_url: str
+ports:
+  80/tcp: 9080
+  443/tcp: 9443
