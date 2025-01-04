@@ -7,7 +7,7 @@
   "startup": "services",
   "boot": "auto",
   "ports": {
-    "5000/tcp": 5000
+    "5000/tcp": 5000,
     "80/tcp": 9080,
     "443/tcp": 9443
   },
