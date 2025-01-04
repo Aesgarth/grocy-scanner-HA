@@ -1,5 +1,5 @@
 {
-  "name": "Grocy Scanner",
+  "name": "Grocy-Scanner",
   "version": "1.0.0",
   "slug": "grocy_scanner",
   "description": "A barcode scanner for Grocy, integrated with Home Assistant.",
