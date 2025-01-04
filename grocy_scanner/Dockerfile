@@ -20,11 +20,8 @@ WORKDIR /app
 COPY --from=build /app/publish .
 
 # Copy the run.sh script for Home Assistant S6 overlay compatibility
-COPY run.sh /run.sh
-RUN chmod +x /run.sh
+COPY run.sh /etc/services.d/grocy-scanner/run
+RUN chmod +x /etc/services.d/grocy-scanner/run
 
 # Expose necessary ports
 EXPOSE 9080 9443
-
-# Set the entry point to the run.sh script
-ENTRYPOINT [ "/run.sh" ]
