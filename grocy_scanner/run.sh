@@ -1,15 +1,15 @@
 #!/usr/bin/with-contenv bashio
-# ==============================================================================
-# Home Assistant Community Add-on: Grocy Scanner
-# Starts the Grocy Scanner service
-# ==============================================================================
 
-# Load the add-on options
+# Log add-on startup
+bashio::log.info "Starting Grocy Scanner Add-on"
+
+# Retrieve options from config.yaml
 API_KEY=$(bashio::config 'api_key')
 GROCY_URL=$(bashio::config 'grocy_url')
 
-# Log the configuration
-bashio::log.info "Starting Grocy Scanner with API Key: ${API_KEY} and URL: ${GROCY_URL}"
+# Log configuration values (optional, redact sensitive info in production)
+bashio::log.info "Using API Key: ${API_KEY}"
+bashio::log.info "Grocy URL: ${GROCY_URL}"
 
-# Run the application
-exec dotnet /app/GrocyScanner.Service.dll
+# Run the .NET application
+exec dotnet GrocyScanner.Service.dll
