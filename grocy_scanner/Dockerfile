@@ -20,6 +20,7 @@ WORKDIR /app
 COPY --from=build /app/publish .
 
 # Copy the run.sh script
+COPY run.sh /run.sh
 COPY grocy_scanner/run.sh /
 RUN chmod a+x /run.sh
 
