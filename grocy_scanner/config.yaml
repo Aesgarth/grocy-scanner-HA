@@ -10,6 +10,8 @@ arch:
   - i386
 startup: services
 init: false
+ingress: true
+ingress_port: 9080
 boot: auto
 options:
   api_key: YOUR_API_KEY
